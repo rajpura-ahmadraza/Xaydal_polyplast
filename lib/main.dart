@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:plastic_business_app/firebase_options.dart';
 import 'app/routes/app_routes.dart';
 import 'app/bindings/bindings.dart';
 import 'app/theme/app_theme.dart';
@@ -11,6 +12,10 @@ void main() async {
   runApp(const MyApp());
 
   await Firebase.initializeApp();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class MyApp extends StatelessWidget {

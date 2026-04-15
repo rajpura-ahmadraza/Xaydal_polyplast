@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:plastic_business_app/app/views/full_screen.dart';
+import 'package:share_plus/share_plus.dart';
 import '../controllers/biz_controller.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/theme_controller.dart';
@@ -369,7 +371,7 @@ class ProfileView extends GetView<BizController> {
         border: Border.all(color: dark ? C.s700 : C.s200),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        // Image & Name row
+        /// IMAGE + NAME
         Row(children: [
           Container(
             width: 70,
@@ -380,31 +382,18 @@ class ProfileView extends GetView<BizController> {
               border: Border.all(color: dark ? C.s600 : C.g200),
             ),
 
-            /// ✅ IMAGE CLICK + FULL SCREEN FIX
+            /// ✅ UPDATED IMAGE LOGIC (MULTIPLE SUPPORT)
             child: item.imageUrl != null && item.imageUrl!.isNotEmpty
                 ? GestureDetector(
                     onTap: () {
-                      Get.to(() => FullScreenImage(imagePath: item.imageUrl!));
+                      Get.to(() => FullScreenImage(
+                            images: [item.imageUrl!],
+                            imagePath: '${item.imageUrl!}',
+                          ));
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: item.imageUrl!.startsWith('http')
-                          ? Image.network(
-                              item.imageUrl!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => const Center(
-                                child:
-                                    Text('🪣', style: TextStyle(fontSize: 30)),
-                              ),
-                            )
-                          : Image.file(
-                              File(item.imageUrl!),
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => const Center(
-                                child:
-                                    Text('🪣', style: TextStyle(fontSize: 30)),
-                              ),
-                            ),
+                      child: _buildImage(item.imageUrl!),
                     ),
                   )
                 : const Center(
@@ -412,6 +401,8 @@ class ProfileView extends GetView<BizController> {
                   ),
           ),
           const SizedBox(width: 14),
+
+          /// NAME + DETAILS
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -439,6 +430,8 @@ class ProfileView extends GetView<BizController> {
               ],
             ),
           ),
+
+          /// PRICE
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -457,7 +450,7 @@ class ProfileView extends GetView<BizController> {
         Divider(height: 1, color: dark ? C.s700 : C.s200),
         const SizedBox(height: 12),
 
-        // Specs grid
+        /// SPECS
         Row(children: [
           Expanded(
             child: _specBox('Capacity', '${item.sizeInLiters} L',
@@ -487,6 +480,7 @@ class ProfileView extends GetView<BizController> {
 
         const SizedBox(height: 12),
 
+        /// BUTTONS
         Row(children: [
           Expanded(
             child: OutlinedButton.icon(
@@ -506,6 +500,7 @@ class ProfileView extends GetView<BizController> {
             ),
           ),
           const SizedBox(width: 10),
+
           Expanded(
             child: OutlinedButton.icon(
               onPressed: () => controller.deleteBrochureItem(item.id),
@@ -522,9 +517,96 @@ class ProfileView extends GetView<BizController> {
               ),
             ),
           ),
+          const SizedBox(width: 10),
+
+          /// ✅ SHARE WITH IMAGE + DETAILS
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: () async {
+                String text = '''
+🪣 ${item.bucketName}
+
+Capacity: ${item.sizeInLiters} Litres
+Material: ${item.material}
+Price: ₹${item.sellingPrice}
+
+${item.description ?? ''}
+''';
+
+                try {
+                  if (item.imageUrl != null && item.imageUrl!.isNotEmpty) {
+                    List<XFile> files = [];
+
+                    for (var path in [item.imageUrl!]) {
+                      if (path.startsWith('/')) {
+                        files.add(XFile(path));
+                      } else {
+                        final bytes = base64Decode(path);
+                        final dir = await getTemporaryDirectory();
+                        final file = File(
+                            '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.png');
+                        await file.writeAsBytes(bytes);
+                        files.add(XFile(file.path));
+                      }
+                    }
+
+                    await Share.shareXFiles(files, text: text);
+                  } else {
+                    Share.share(text);
+                  }
+                } catch (e) {
+                  Share.share(text);
+                }
+              },
+              icon: const Icon(Icons.share_outlined, size: 15),
+              label: Text('Share',
+                  style: GoogleFonts.poppins(
+                      fontSize: 12, fontWeight: FontWeight.w600)),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: C.indigo,
+                side: const BorderSide(color: C.indigo),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+            ),
+          ),
         ]),
       ]),
     );
+  }
+
+  Widget _buildImage(String path) {
+    try {
+      if (path.startsWith('http')) {
+        return Image.network(
+          path,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) =>
+              const Center(child: Text('🪣', style: TextStyle(fontSize: 30))),
+        );
+      } else if (path.startsWith('/')) {
+        /// ✅ LOCAL FILE FIX (MAIN)
+        return Image.file(
+          File(path),
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) =>
+              const Center(child: Text('🪣', style: TextStyle(fontSize: 30))),
+        );
+      } else {
+        /// BASE64
+        return Image.memory(
+          base64Decode(path),
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) =>
+              const Center(child: Text('🪣', style: TextStyle(fontSize: 30))),
+        );
+      }
+    } catch (e) {
+      return const Center(
+        child: Text('🪣', style: TextStyle(fontSize: 30)),
+      );
+    }
   }
 
   Widget _specBox(
@@ -643,4 +725,10 @@ class ProfileView extends GetView<BizController> {
                 ? Icon(Icons.arrow_forward_ios_rounded, size: 14, color: C.s400)
                 : null),
       );
+
+  Future<Object?> getTemporaryDirectory() async {}
+}
+
+extension on Object? {
+  get path => null;
 }
