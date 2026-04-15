@@ -84,11 +84,11 @@ class OrderView extends GetView<DashboardController> {
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryColor?.withOpacity(0.08),
+                        color: AppTheme.dark.primaryColor.withOpacity(0.08),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(Icons.receipt_long_outlined,
-                          size: 48, color: AppTheme.primaryColor),
+                          size: 48, color: AppTheme.dark.primaryColor),
                     ),
                     const SizedBox(height: 16),
                     Text('કોઈ ઓર્ડર નથી',
@@ -115,7 +115,7 @@ class OrderView extends GetView<DashboardController> {
         icon: const Icon(Icons.add_rounded),
         label: Text('નવો ઓર્ડર',
             style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
-        backgroundColor: AppTheme.primaryColor,
+        backgroundColor: AppTheme.dark.primaryColor,
         foregroundColor: Colors.white,
       ),
     );
@@ -129,7 +129,7 @@ class OrderView extends GetView<DashboardController> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
         decoration: BoxDecoration(
-          color: active ? AppTheme.primaryColor : Colors.transparent,
+          color: active ? AppTheme.dark.primaryColor : Colors.transparent,
           borderRadius: BorderRadius.circular(24),
           // border: Border.all(
           //     color: active
@@ -152,7 +152,7 @@ class OrderView extends GetView<DashboardController> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: isDark ? AppTheme.darkCard : Colors.white,
+        color: isDark ? AppTheme.dark.primaryColor : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
             color:
@@ -166,7 +166,7 @@ class OrderView extends GetView<DashboardController> {
               width: 46,
               height: 46,
               decoration: BoxDecoration(
-                color: AppTheme.primaryColor?.withOpacity(0.1),
+                color: AppTheme.dark.primaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(13),
               ),
               child: Center(
@@ -177,7 +177,7 @@ class OrderView extends GetView<DashboardController> {
                   style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: AppTheme.primaryColor),
+                      color: AppTheme.dark.primaryColor),
                 ),
               ),
             ),
@@ -199,7 +199,7 @@ class OrderView extends GetView<DashboardController> {
                   style: GoogleFonts.poppins(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
-                      color: AppTheme.primaryColor)),
+                      color: AppTheme.dark.primaryColor)),
               Text(dateStr,
                   style: GoogleFonts.poppins(
                       fontSize: 11, color: Colors.grey.shade400)),
@@ -222,12 +222,12 @@ class OrderView extends GetView<DashboardController> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: AppTheme.primaryColor?.withOpacity(0.08),
+                color: AppTheme.dark.primaryColor.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text('${o.quantity}× ${o.productName}',
                   style: GoogleFonts.poppins(
-                      fontSize: 12, color: AppTheme.primaryColor)),
+                      fontSize: 12, color: AppTheme.dark.primaryColor)),
             ),
             const Spacer(),
             if (!isDelivered)

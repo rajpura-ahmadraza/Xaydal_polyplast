@@ -38,8 +38,7 @@ class DashboardController extends GetxController {
   int get pendingOrdersCount =>
       orders.where((o) => o.status == 'pending').length;
 
-  List<OrderModel> get recentOrders =>
-      orders.reversed.take(5).toList();
+  List<OrderModel> get recentOrders => orders.reversed.take(5).toList();
 
   List<ProductModel> get lowStockProducts =>
       products.where((p) => p.isLowStock).toList();
@@ -90,10 +89,35 @@ class DashboardController extends GetxController {
 
   void _loadDefaultProducts() {
     products.assignAll([
-      ProductModel(id: 'p1', name: '5L Plastic Bucket', price: 45, stock: 120, size: '5L', color: 'Blue'),
-      ProductModel(id: 'p2', name: '10L Plastic Bucket', price: 75, stock: 85, size: '10L', color: 'Red'),
-      ProductModel(id: 'p3', name: '20L Plastic Bucket', price: 120, stock: 18, size: '20L', color: 'Green', minStock: 30),
-      ProductModel(id: 'p4', name: '5L Painted Bucket', price: 60, stock: 50, size: '5L', color: 'Yellow'),
+      ProductModel(
+          id: 'p1',
+          name: '5L Plastic Bucket',
+          price: 45,
+          stock: 120,
+          size: '5L',
+          color: 'Blue'),
+      ProductModel(
+          id: 'p2',
+          name: '10L Plastic Bucket',
+          price: 75,
+          stock: 85,
+          size: '10L',
+          color: 'Red'),
+      ProductModel(
+          id: 'p3',
+          name: '20L Plastic Bucket',
+          price: 120,
+          stock: 18,
+          size: '20L',
+          color: 'Green',
+          minStock: 30),
+      ProductModel(
+          id: 'p4',
+          name: '5L Painted Bucket',
+          price: 60,
+          stock: 50,
+          size: '5L',
+          color: 'Yellow'),
     ]);
     _saveProducts();
   }
@@ -101,16 +125,38 @@ class DashboardController extends GetxController {
   void _loadDefaultOrders() {
     final now = DateTime.now();
     orders.assignAll([
-      OrderModel(id: 'o1', customerName: 'Ramesh Shah', customerPhone: '9876543210',
-          productId: 'p2', productName: '10L Plastic Bucket', quantity: 30,
-          pricePerUnit: 75, totalAmount: 2250, status: 'pending', date: now),
-      OrderModel(id: 'o2', customerName: 'Priya Store', customerPhone: '9123456789',
-          productId: 'p3', productName: '20L Plastic Bucket', quantity: 15,
-          pricePerUnit: 120, totalAmount: 1800, status: 'pending',
+      OrderModel(
+          id: 'o1',
+          customerName: 'Ramesh Shah',
+          customerPhone: '9876543210',
+          productId: 'p2',
+          productName: '10L Plastic Bucket',
+          quantity: 30,
+          pricePerUnit: 75,
+          totalAmount: 2250,
+          status: 'pending',
+          date: now),
+      OrderModel(
+          id: 'o2',
+          customerName: 'Priya Store',
+          customerPhone: '9123456789',
+          productId: 'p3',
+          productName: '20L Plastic Bucket',
+          quantity: 15,
+          pricePerUnit: 120,
+          totalAmount: 1800,
+          status: 'pending',
           date: now.add(const Duration(days: 1))),
-      OrderModel(id: 'o3', customerName: 'Mohan Traders', customerPhone: '9988776655',
-          productId: 'p1', productName: '5L Plastic Bucket', quantity: 50,
-          pricePerUnit: 45, totalAmount: 2250, status: 'delivered',
+      OrderModel(
+          id: 'o3',
+          customerName: 'Mohan Traders',
+          customerPhone: '9988776655',
+          productId: 'p1',
+          productName: '5L Plastic Bucket',
+          quantity: 50,
+          pricePerUnit: 45,
+          totalAmount: 2250,
+          status: 'delivered',
           date: now.subtract(const Duration(days: 1))),
     ]);
     _saveOrders();
@@ -118,14 +164,29 @@ class DashboardController extends GetxController {
 
   void _loadDefaultCustomers() {
     customers.assignAll([
-      CustomerModel(id: 'c1', name: 'Ramesh Shah', phone: '9876543210',
-          address: 'Himatnagar', totalPurchase: 18500, totalOrders: 12,
+      CustomerModel(
+          id: 'c1',
+          name: 'Ramesh Shah',
+          phone: '9876543210',
+          address: 'Himatnagar',
+          totalPurchase: 18500,
+          totalOrders: 12,
           createdAt: DateTime.now()),
-      CustomerModel(id: 'c2', name: 'Priya Store', phone: '9123456789',
-          address: 'Gandhinagar', totalPurchase: 12200, totalOrders: 8,
+      CustomerModel(
+          id: 'c2',
+          name: 'Priya Store',
+          phone: '9123456789',
+          address: 'Gandhinagar',
+          totalPurchase: 12200,
+          totalOrders: 8,
           createdAt: DateTime.now()),
-      CustomerModel(id: 'c3', name: 'Mohan Traders', phone: '9988776655',
-          address: 'Ahmedabad', totalPurchase: 9800, totalOrders: 6,
+      CustomerModel(
+          id: 'c3',
+          name: 'Mohan Traders',
+          phone: '9988776655',
+          address: 'Ahmedabad',
+          totalPurchase: 9800,
+          totalOrders: 6,
           createdAt: DateTime.now()),
     ]);
     _saveCustomers();
@@ -135,7 +196,8 @@ class DashboardController extends GetxController {
   void addProduct(ProductModel p) {
     products.add(p);
     _saveProducts();
-    Get.snackbar('સફળ!', '${p.name} ઉમેરવામાં આવ્યો', snackPosition: SnackPosition.BOTTOM);
+    Get.snackbar('સફળ!', '${p.name} ઉમેરવામાં આવ્યો',
+        snackPosition: SnackPosition.TOP);
   }
 
   void updateStock(String productId, int qty) {
@@ -144,13 +206,15 @@ class DashboardController extends GetxController {
       products[idx].stock += qty;
       products.refresh();
       _saveProducts();
-      Get.snackbar('Stock અપડેટ', '${products[idx].name}: ${products[idx].stock} pcs',
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+          'Stock અપડેટ', '${products[idx].name}: ${products[idx].stock} pcs',
+          snackPosition: SnackPosition.TOP);
     }
   }
 
   void _saveProducts() {
-    _box.write('products', jsonEncode(products.map((p) => p.toJson()).toList()));
+    _box.write(
+        'products', jsonEncode(products.map((p) => p.toJson()).toList()));
   }
 
   // ─── Order Methods ─────────────────────────────────────────────
@@ -160,7 +224,7 @@ class DashboardController extends GetxController {
     if (idx != -1) {
       if (products[idx].stock < o.quantity) {
         Get.snackbar('Error', 'Stock ઓછો છે! Available: ${products[idx].stock}',
-            snackPosition: SnackPosition.BOTTOM);
+            snackPosition: SnackPosition.TOP);
         return;
       }
       products[idx].stock -= o.quantity;
@@ -179,8 +243,9 @@ class DashboardController extends GetxController {
       _saveCustomers();
     }
 
-    Get.snackbar('ઓર્ડર ઉમેરાયો!', '${o.customerName} - ₹${o.totalAmount.toInt()}',
-        snackPosition: SnackPosition.BOTTOM);
+    Get.snackbar(
+        'ઓર્ડર ઉમેરાયો!', '${o.customerName} - ₹${o.totalAmount.toInt()}',
+        snackPosition: SnackPosition.TOP);
   }
 
   void markOrderDelivered(String orderId) {
@@ -189,8 +254,9 @@ class DashboardController extends GetxController {
       orders[idx].status = 'delivered';
       orders.refresh();
       _saveOrders();
-      Get.snackbar('ડિલિવર!', '${orders[idx].customerName} - ₹${orders[idx].totalAmount.toInt()}',
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('ડિલિવર!',
+          '${orders[idx].customerName} - ₹${orders[idx].totalAmount.toInt()}',
+          snackPosition: SnackPosition.TOP);
     }
   }
 
@@ -202,10 +268,11 @@ class DashboardController extends GetxController {
   void addCustomer(CustomerModel c) {
     customers.add(c);
     _saveCustomers();
-    Get.snackbar('ગ્રાહક ઉમેરાયો!', c.name, snackPosition: SnackPosition.BOTTOM);
+    Get.snackbar('ગ્રાહક ઉમેરાયો!', c.name, snackPosition: SnackPosition.TOP);
   }
 
   void _saveCustomers() {
-    _box.write('customers', jsonEncode(customers.map((c) => c.toJson()).toList()));
+    _box.write(
+        'customers', jsonEncode(customers.map((c) => c.toJson()).toList()));
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "870466193108",
+    "project_id": "xaydal",
+    "storage_bucket": "xaydal.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870466193108:android:0f08471c9b0a2ecd245d41",
+        "android_client_info": {
+          "package_name": "com.example.xyadal_bucket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuRhpS7Mqj_eGEpXrBFREkctitGnrZzgE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

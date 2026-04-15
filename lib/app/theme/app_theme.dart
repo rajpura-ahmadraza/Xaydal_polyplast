@@ -152,29 +152,11 @@ class AppTheme {
     ),
   );
 
-  static get darkCard => null;
+  static Color? goldColor;
 
-  static get goldColor => null;
-
-  static Color? get primaryColor => null;
-
-  static get accentColor => null;
+  static var accentColor;
 
   static get silver100 => null;
 
-  static get darkBorder => null;
-
-  static Color? get gold700 => null;
-
   static get gold600 => null;
-
-  static Color? get success => null;
-
-  static Color? get teal => null;
-
-  static Color? get indigo => null;
-
-  static Color? get white => null;
-
-  static Color? get danger => null;
 }

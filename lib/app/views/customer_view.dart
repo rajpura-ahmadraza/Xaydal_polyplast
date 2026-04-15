@@ -113,7 +113,7 @@ class CustomerView extends GetView<DashboardController> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: isDark ? AppTheme.darkCard : Colors.white,
+        color: isDark ? AppTheme.goldColor : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
             color:
@@ -151,7 +151,7 @@ class CustomerView extends GetView<DashboardController> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                     decoration: BoxDecoration(
-                      color: AppTheme.goldColor.withOpacity(0.15),
+                      color: AppTheme.goldColor?.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text('⭐ VIP',
@@ -178,7 +178,7 @@ class CustomerView extends GetView<DashboardController> {
                 style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
-                    color: AppTheme.primaryColor)),
+                    color: AppTheme.dark.primaryColor)),
             Text('${c.totalOrders} orders',
                 style: GoogleFonts.poppins(
                     fontSize: 11, color: Colors.grey.shade400)),

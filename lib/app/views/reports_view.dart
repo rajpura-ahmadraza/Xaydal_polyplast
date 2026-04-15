@@ -33,17 +33,19 @@ class ReportsView extends GetView<BizController> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: dark ? AppTheme.darkCard : AppTheme.silver100,
+                      color: dark
+                          ? AppTheme.goldColor
+                          : AppTheme.dark.primaryColor,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                           color:
-                              dark ? AppTheme.darkBorder : AppTheme.silver100),
+                              dark ? AppTheme.goldColor : AppTheme.silver100),
                     ),
                     child: Icon(
                       tc.isDark.value
                           ? Icons.light_mode_rounded
                           : Icons.dark_mode_rounded,
-                      color: AppTheme.gold700,
+                      color: AppTheme.goldColor,
                       size: 20,
                     ),
                   ),
@@ -141,10 +143,11 @@ class ReportsView extends GetView<BizController> {
                 height: 200,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: dark ? AppTheme.darkCard : AppTheme.white,
+                  color:
+                      dark ? AppTheme.goldColor : AppTheme.light.primaryColor,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                      color: dark ? AppTheme.darkBorder : AppTheme.silver100),
+                      color: dark ? AppTheme.dark : AppTheme.silver100),
                 ),
                 child: BarChart(
                   BarChartData(
@@ -182,8 +185,7 @@ class ReportsView extends GetView<BizController> {
                       drawVerticalLine: false,
                       horizontalInterval: 1000,
                       getDrawingHorizontalLine: (_) => FlLine(
-                          color:
-                              dark ? AppTheme.darkBorder : AppTheme.silver100,
+                          color: dark ? AppTheme.dark : AppTheme.silver100,
                           strokeWidth: 1),
                     ),
                     borderData: FlBorderData(show: false),
@@ -220,10 +222,10 @@ class ReportsView extends GetView<BizController> {
                 height: 200,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: dark ? AppTheme.darkCard : Colors.white,
+                  color: dark ? AppTheme.dark.primaryColor : Colors.white,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                      color: dark ? AppTheme.darkBorder : AppTheme.silver100),
+                      color: dark ? AppTheme.dark : AppTheme.silver100),
                 ),
                 child: LineChart(
                   LineChartData(
@@ -255,8 +257,7 @@ class ReportsView extends GetView<BizController> {
                       show: true,
                       drawVerticalLine: false,
                       getDrawingHorizontalLine: (_) => FlLine(
-                          color:
-                              dark ? AppTheme.darkBorder : AppTheme.silver100,
+                          color: dark ? AppTheme.dark : AppTheme.silver100,
                           strokeWidth: 1),
                     ),
                     borderData: FlBorderData(show: false),
@@ -268,7 +269,7 @@ class ReportsView extends GetView<BizController> {
                                 controller.monthlyOrderCount[i].toDouble())),
                         isCurved: true,
                         curveSmoothness: 0.3,
-                        color: AppTheme.gold700,
+                        color: AppTheme.gold600,
                         barWidth: 3,
                         dotData: FlDotData(
                           show: true,
@@ -307,10 +308,10 @@ class ReportsView extends GetView<BizController> {
                   margin: const EdgeInsets.only(bottom: 10),
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: dark ? AppTheme.darkCard : Colors.white,
+                    color: dark ? AppTheme.dark.primaryColor : Colors.white,
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                        color: dark ? AppTheme.darkBorder : AppTheme.silver100),
+                        color: dark ? AppTheme.dark : AppTheme.silver100),
                   ),
                   child: Row(children: [
                     const Text('🪣', style: TextStyle(fontSize: 22)),
@@ -330,7 +331,7 @@ class ReportsView extends GetView<BizController> {
                         style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
-                            color: AppTheme.gold700)),
+                            color: AppTheme.gold600)),
                   ]),
                 );
               }),
@@ -341,10 +342,10 @@ class ReportsView extends GetView<BizController> {
               const SizedBox(height: 12),
               Container(
                 decoration: BoxDecoration(
-                  color: dark ? AppTheme.darkCard : Colors.white,
+                  color: dark ? AppTheme.dark.primaryColor : Colors.white,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                      color: dark ? AppTheme.darkBorder : AppTheme.silver100),
+                      color: dark ? AppTheme.dark : AppTheme.silver100),
                 ),
                 child: Column(children: [
                   Obx(() => _settingTile(
@@ -363,13 +364,13 @@ class ReportsView extends GetView<BizController> {
                       )),
                   Divider(
                       height: 1,
-                      color: dark ? AppTheme.darkBorder : AppTheme.silver100),
+                      color: dark ? AppTheme.dark : AppTheme.silver100),
                   _settingTile(Icons.info_outline_rounded, 'App Version',
                       'v3.0 — Gold & Silver Edition', Colors.teal,
                       dark: dark),
                   Divider(
                       height: 1,
-                      color: dark ? AppTheme.darkBorder : AppTheme.silver100),
+                      color: dark ? AppTheme.dark : AppTheme.silver100),
                   _settingTile(Icons.logout_rounded, 'Logout',
                       'Account thi logout thao', AppTheme.gold600,
                       onTap: () => Get.find<AuthController>().logout(),
@@ -388,10 +389,10 @@ class ReportsView extends GetView<BizController> {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: dark ? AppTheme.darkCard : Colors.white,
+            color: dark ? AppTheme.dark.primaryColor : Colors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-                color: dark ? AppTheme.darkBorder : AppTheme.silver100),
+            border:
+                Border.all(color: dark ? AppTheme.dark : AppTheme.silver100),
           ),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
