@@ -774,6 +774,7 @@ ${item.description ?? ''}
                 : null),
       );
 
+  // ignore: body_might_complete_normally_nullable
   Future<Object?> getTemporaryDirectory() async {}
 }
 
