@@ -382,19 +382,41 @@ class ProfileView extends GetView<BizController> {
               border: Border.all(color: dark ? C.s600 : C.g200),
             ),
 
-            /// ✅ UPDATED IMAGE LOGIC (MULTIPLE SUPPORT)
-            child: item.imageUrl != null && item.imageUrl!.isNotEmpty
+            /// ✅ MULTIPLE IMAGE SUPPORT
+            child: item.imageUrls.isNotEmpty
                 ? GestureDetector(
                     onTap: () {
                       Get.to(() => FullScreenImage(
-                            images: [item.imageUrl!],
-                            imagePath: '${item.imageUrl!}',
+                            images: item.imageUrls,
+                            imagePath: item.imageUrls.first,
                           ));
                     },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: _buildImage(item.imageUrl!),
-                    ),
+                    child: Stack(children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: _buildImage(item.imageUrls.first),
+                      ),
+                      if (item.imageUrls.length > 1)
+                        Positioned(
+                          bottom: 4,
+                          right: 4,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.black54,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              '+${item.imageUrls.length - 1}',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                    ]),
                   )
                 : const Center(
                     child: Text('🪣', style: TextStyle(fontSize: 36)),
@@ -468,6 +490,32 @@ class ProfileView extends GetView<BizController> {
           ),
         ]),
 
+        if (item.height != null && item.height!.isNotEmpty ||
+            item.handle != null && item.handle!.isNotEmpty) ...[
+          const SizedBox(height: 10),
+          Row(children: [
+            if (item.height != null && item.height!.isNotEmpty)
+              Expanded(
+                child: _specBox(
+                    'Height', item.height!, Icons.height_rounded, C.g700, dark),
+              ),
+            if (item.height != null &&
+                item.height!.isNotEmpty &&
+                item.handle != null &&
+                item.handle!.isNotEmpty)
+              const SizedBox(width: 10),
+            if (item.handle != null && item.handle!.isNotEmpty)
+              Expanded(
+                child: _specBox('Handle', item.handle!,
+                    Icons.drag_handle_rounded, C.teal, dark),
+              ),
+            // empty spacer to keep left-aligned when only one box
+            if ((item.height == null || item.height!.isEmpty) ||
+                (item.handle == null || item.handle!.isEmpty))
+              const Expanded(child: SizedBox()),
+          ]),
+        ],
+
         if (item.description != null && item.description!.isNotEmpty) ...[
           const SizedBox(height: 12),
           Text(
@@ -527,17 +575,17 @@ class ProfileView extends GetView<BizController> {
 🪣 ${item.bucketName}
 
 Capacity: ${item.sizeInLiters} Litres
-Material: ${item.material}
-Price: ₹${item.sellingPrice}
+Material: ${item.material}${item.height != null && item.height!.isNotEmpty ? '\nHeight: ${item.height}' : ''}${item.handle != null && item.handle!.isNotEmpty ? '\nHandle: ${item.handle}' : ''}
+Price: ₹${item.sellingPrice.toInt()}
 
 ${item.description ?? ''}
 ''';
 
                 try {
-                  if (item.imageUrl != null && item.imageUrl!.isNotEmpty) {
+                  if (item.imageUrls.isNotEmpty) {
                     List<XFile> files = [];
 
-                    for (var path in [item.imageUrl!]) {
+                    for (var path in item.imageUrls) {
                       if (path.startsWith('/')) {
                         files.add(XFile(path));
                       } else {
@@ -726,7 +774,6 @@ ${item.description ?? ''}
                 : null),
       );
 
-  // ignore: body_might_complete_normally_nullable
   Future<Object?> getTemporaryDirectory() async {}
 }
 

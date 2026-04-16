@@ -154,7 +154,8 @@ class BrochureItem {
   String id, userId;
   String bucketName, sizeInLiters, bodyWeight, lidWeight;
   double sellingPrice;
-  String? imageUrl, description, material;
+  List<String> imageUrls;
+  String? description, material, height, handle;
 
   BrochureItem({
     required this.id,
@@ -164,9 +165,11 @@ class BrochureItem {
     required this.bodyWeight,
     required this.lidWeight,
     required this.sellingPrice,
-    this.imageUrl,
+    this.imageUrls = const [],
     this.description,
     this.material,
+    this.height,
+    this.handle,
   });
 
   Map<String, dynamic> toMap() => {
@@ -175,14 +178,23 @@ class BrochureItem {
         'bodyWeight': bodyWeight,
         'lidWeight': lidWeight,
         'sellingPrice': sellingPrice,
-        'imageUrl': imageUrl,
+        'imageUrls': imageUrls,
         'description': description,
-        'material': material ?? '',
+        'material': material ?? 'HDPE Plastic',
+        'height': height,
+        'handle': handle,
         'userId': userId,
       };
 
   factory BrochureItem.fromDoc(DocumentSnapshot doc) {
     final d = doc.data() as Map<String, dynamic>;
+    // backward-compat: old docs may have single imageUrl
+    List<String> imgs = [];
+    if (d['imageUrls'] != null) {
+      imgs = List<String>.from(d['imageUrls']);
+    } else if (d['imageUrl'] != null && (d['imageUrl'] as String).isNotEmpty) {
+      imgs = [d['imageUrl'] as String];
+    }
     return BrochureItem(
       id: doc.id,
       userId: d['userId'] ?? '',
@@ -191,9 +203,11 @@ class BrochureItem {
       bodyWeight: d['bodyWeight'] ?? '',
       lidWeight: d['lidWeight'] ?? '',
       sellingPrice: (d['sellingPrice'] as num).toDouble(),
-      imageUrl: d['imageUrl'],
+      imageUrls: imgs,
       description: d['description'],
-      material: d['material'] ?? '',
+      material: d['material'] ?? 'HDPE Plastic',
+      height: d['height'],
+      handle: d['handle'],
     );
   }
 }
