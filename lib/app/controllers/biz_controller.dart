@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import '../models/models.dart';
+import '../services/order_notify_service.dart';
 
 class BizController extends GetxController {
   final _db = FirebaseFirestore.instance;
@@ -88,6 +89,8 @@ class BizController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Initialise notification service once
+    OrderNotifyService.instance.init();
     _listenProducts();
     _listenOrders();
     _listenCustomers();
@@ -131,10 +134,7 @@ class BizController extends GetxController {
       await _productsRef
           .doc(productId)
           .update({'stock': FieldValue.increment(delta)});
-      _snack(
-        'Stock Updated',
-        'Stock updated successfully',
-      );
+      _snack('Stock Updated', 'Stock updated successfully');
     } catch (e) {
       _err(e);
     }
@@ -162,14 +162,11 @@ class BizController extends GetxController {
     }
     try {
       final batch = _db.batch();
-      // Add order
       final orderRef = _ordersRef.doc();
       batch.set(orderRef, {...o.toMap(), 'userId': uid});
-      // Update stock
       if (prod != null)
         batch.update(_productsRef.doc(prod.id),
             {'stock': FieldValue.increment(-o.quantity)});
-      // Update customer totals
       final cust =
           customers.firstWhereOrNull((c) => c.phone == o.customerPhone);
       if (cust != null) {
@@ -180,8 +177,16 @@ class BizController extends GetxController {
       }
       await batch.commit();
       Get.back();
-      _snack(
-          'Order Added', '${o.customerName} — \u20B9${o.totalAmount.toInt()}');
+      _snack('Order Added', '${o.customerName} — \u20B9${o.totalAmount.toInt()}');
+
+      // ── WhatsApp + Notification ──────────────────────────
+      await OrderNotifyService.instance.onOrderPlaced(
+        customerName: o.customerName,
+        customerPhone: o.customerPhone,
+        productName: o.productName,
+        quantity: o.quantity,
+        totalAmount: o.totalAmount,
+      );
     } catch (e) {
       _err(e);
     }
@@ -189,8 +194,20 @@ class BizController extends GetxController {
 
   Future<void> markDelivered(String orderId) async {
     try {
+      final order = orders.firstWhereOrNull((o) => o.id == orderId);
       await _ordersRef.doc(orderId).update({'status': 'delivered'});
       _snack('Delivered!', 'Order marked as delivered');
+
+      // ── WhatsApp + Notification ──────────────────────────
+      if (order != null) {
+        await OrderNotifyService.instance.onOrderDelivered(
+          customerName: order.customerName,
+          customerPhone: order.customerPhone,
+          productName: order.productName,
+          quantity: order.quantity,
+          totalAmount: order.totalAmount,
+        );
+      }
     } catch (e) {
       _err(e);
     }
@@ -206,6 +223,14 @@ class BizController extends GetxController {
           {'stock': FieldValue.increment(order.quantity)});
       await batch.commit();
       _snack('Cancelled', 'Order cancelled and stock restored');
+
+      // ── WhatsApp + Notification ──────────────────────────
+      await OrderNotifyService.instance.onOrderCancelled(
+        customerName: order.customerName,
+        customerPhone: order.customerPhone,
+        productName: order.productName,
+        quantity: order.quantity,
+      );
     } catch (e) {
       _err(e);
     }
@@ -257,7 +282,8 @@ class BizController extends GetxController {
   }
 
   void _snack(String t, String m) => Get.snackbar(t, m,
-      snackPosition: SnackPosition.TOP, duration: const Duration(seconds: 2));
+      snackPosition: SnackPosition.TOP,
+      duration: const Duration(seconds: 2));
   void _err(dynamic e) =>
       Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.TOP);
 }
