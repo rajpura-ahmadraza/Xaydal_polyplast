@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:plastic_business_app/app/models/logout_model.dart';
 import 'package:plastic_business_app/app/views/full_screen.dart';
 import 'package:share_plus/share_plus.dart';
 import '../controllers/biz_controller.dart';
@@ -334,12 +335,16 @@ class ProfileView extends GetView<BizController> {
                     child: Text('Bucket Catalog',
                         style: GoogleFonts.poppins(
                             fontSize: 15, fontWeight: FontWeight.w600))),
-                ElevatedButton.icon(
-                  onPressed: () => Get.toNamed(AppRoutes.addBrochure),
-                  icon: const Icon(Icons.add_rounded, size: 16),
-                  label: Text('Add',
-                      style: GoogleFonts.poppins(
-                          fontSize: 12, fontWeight: FontWeight.w600)),
+                SizedBox(
+                  height: 40,
+                  width: 100,
+                  child: ElevatedButton.icon(
+                    onPressed: () => Get.toNamed(AppRoutes.addBrochure),
+                    icon: const Icon(Icons.add_rounded, size: 16),
+                    label: Text('Add',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12, fontWeight: FontWeight.w600)),
+                  ),
                 ),
               ]),
             ),
@@ -719,7 +724,7 @@ ${item.description ?? ''}
             Divider(height: 1, color: dark ? C.s700 : C.s200),
             _tile(Icons.logout_rounded, 'Sign Out', 'Logout from your account',
                 C.red,
-                onTap: () => auth.logout()),
+                onTap: () => showPremiumLogoutDialog(Get.context!)),
           ]),
         ),
         const SizedBox(height: 40),

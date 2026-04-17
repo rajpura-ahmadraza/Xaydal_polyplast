@@ -93,7 +93,7 @@ class AddBrochureView extends GetView<BizController> {
                       GestureDetector(
                         onTap: pickImages,
                         child: Container(
-                          width: 80,
+                          width: double.infinity,
                           height: 80,
                           decoration: BoxDecoration(
                             color: dark ? C.s750 : C.g50,
