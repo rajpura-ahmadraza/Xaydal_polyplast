@@ -214,6 +214,7 @@ class OrdersView extends GetView<BizController> {
     );
   }
 
+  // ignore: unused_element
   void _confirmDialog({
     required BuildContext context,
     required String title,
